@@ -7,26 +7,20 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-8A2BE2?style=for-the-badge)](LICENSE)
 [![Repository](https://img.shields.io/badge/GitHub-Public-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/kamrullab/house-price-prediction-system)
 [![Open in Colab](https://img.shields.io/badge/Open_in_Colab-Run_Notebook-F9AB00?style=for-the-badge&logo=googlecolab&logoColor=white)](https://colab.research.google.com/github/kamrullab/house-price-prediction-system/blob/main/notebooks/House_Price_Prediction_Colab.ipynb)
+[![BDT Colab](https://img.shields.io/badge/BDT_Colab-Dhaka_Rent-006A4E?style=for-the-badge&logo=googlecolab&logoColor=white)](https://colab.research.google.com/github/kamrullab/house-price-prediction-system/blob/main/notebooks/Dhaka_House_Rent_Prediction_BDT_Colab.ipynb)
 [![GitHub Actions](https://img.shields.io/github/actions/workflow/status/kamrullab/house-price-prediction-system/tests.yml?branch=main&style=for-the-badge&logo=githubactions&label=Build)](https://github.com/kamrullab/house-price-prediction-system/actions)
 
-## Run the complete project in Google Colab
+## 🚀 Choose your one-click Google Colab
 
-<a href="https://colab.research.google.com/github/kamrullab/house-price-prediction-system/blob/main/notebooks/House_Price_Prediction_Colab.ipynb">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open the complete project in Google Colab">
-</a>
+| Project | Currency and target | One-click notebook |
+|---|---|---|
+| 🏠 House sale-price model | 🇺🇸 Historical sale price in **USD ($)** | [![Open USD notebook in Colab](https://img.shields.io/badge/Open_USD_Model-F9AB00?style=for-the-badge&logo=googlecolab&logoColor=white)](https://colab.research.google.com/github/kamrullab/house-price-prediction-system/blob/main/notebooks/House_Price_Prediction_Colab.ipynb) |
+| 🇧🇩 Dhaka rent model | 💰 Monthly asking rent in **BDT (৳/month)** | [![Open BDT notebook in Colab](https://img.shields.io/badge/Open_BDT_Model-006A4E?style=for-the-badge&logo=googlecolab&logoColor=white)](https://colab.research.google.com/github/kamrullab/house-price-prediction-system/blob/main/notebooks/Dhaka_House_Rent_Prediction_BDT_Colab.ipynb) |
 
-Click the button above, then select **Runtime > Run all**. Colab will automatically:
+Click either colorful button, then select **Runtime > Run all**. Colab automatically installs packages, loads real data, creates charts, trains and compares models, evaluates results, and makes an example prediction. No upload, Google Drive mount, API key, or path editing is required.
 
-1. Clone or update the latest public repository.
-2. Install every required Python package.
-3. Load and inspect the committed real dataset.
-4. Generate the correlation heatmap and area-price analysis.
-5. Train and evaluate Multiple Linear Regression.
-6. Display actual-versus-predicted and residual plots.
-7. Compare Linear Regression with Random Forest.
-8. Generate an example house-price prediction.
-
-No file upload, Google Drive mount, API key, or manual path editing is required.
+> 🔵 **USD notebook:** King County historical house **sale prices**.<br>
+> 🟢 **BDT notebook:** Dhaka **monthly asking rents** shown as `৳.../month`. These are two different prediction tasks; currency labels are never converted or mixed.
 
 A complete academic machine-learning project that predicts residential property prices with Multiple Linear Regression. It includes real public house-sale data, preprocessing, model evaluation, automated tests, and an interactive Streamlit web application.
 
@@ -34,15 +28,16 @@ A complete academic machine-learning project that predicts residential property 
 
 ![Streamlit application](reports/figures/streamlit_app.png)
 
-## Project deliverables
+## 📦 Project deliverables
 
 - [Google Colab notebook](notebooks/House_Price_Prediction_Colab.ipynb)
+- [Dhaka BDT rent-prediction Colab notebook](notebooks/Dhaka_House_Rent_Prediction_BDT_Colab.ipynb)
 - [Academic report in Word format](output/document/House_Price_Prediction_Academic_Report.docx)
 - [Academic report in PDF format](output/pdf/House_Price_Prediction_Academic_Report.pdf)
 - [Generated EDA and evaluation figures](reports/figures/)
 - [Model comparison results](reports/model_comparison.csv)
 
-## Features
+## ✨ Features
 
 - Predicts prices from area, bedrooms, bathrooms, property age, and location
 - Handles missing numeric and categorical values
@@ -54,6 +49,7 @@ A complete academic machine-learning project that predicts residential property 
 - Supports CSV upload, custom-model download, and prediction-history export
 - Compares Linear Regression with a Random Forest benchmark
 - Includes a Google Colab notebook, EDA charts, residual analysis, and an academic report
+- Includes a separate one-click Bangladesh notebook trained on real Dhaka rental listings with BDT/month output
 
 ## Project structure
 
@@ -158,7 +154,7 @@ python -m streamlit run app.py
 
 Run each command separately. Every command has its own copy button on GitHub.
 
-## Real dataset
+## 🌍 Real datasets
 
 The committed `data/housing.csv` is prepared from the **King County House Sales** dataset on [OpenML](https://www.openml.org/search?id=42092&type=data). The source contains 21,613 sales, 19 property features plus price and ID, and is released under **CC0 Public Domain**. Cleaning leaves 21,601 usable rows in this repository.
 
@@ -179,9 +175,15 @@ The repository already contains the prepared CSV, so setup works without downloa
 python download_real_data.py
 ```
 
-## Google Colab
+### 🇧🇩 Bangladesh dataset for the BDT Colab
 
-Use the **Open in Colab** badge at the top of this README. In Colab, choose **Runtime > Run all**. The notebook clones this repository, installs its requirements, loads the real dataset, creates the EDA plots, trains the model, evaluates residuals, compares both algorithms, and makes an example prediction.
+The BDT notebook downloads **3,083 real Dhaka residential rental listings** directly from [Mendeley Data (DOI 10.17632/d3rxcxn74y.1)](https://doi.org/10.17632/d3rxcxn74y.1). It includes monthly asking rent in BDT, neighbourhood, floor size, bedrooms, bathrooms, property type, furnishing, condition, listing details, and amenity indicators. The dataset is released under **CC0 1.0**.
+
+The notebook fetches the CSV automatically, so it works without a local Bangladesh dataset file. Its output is monthly asking rent such as `৳45,000/month`—not a property sale price.
+
+## ▶️ Google Colab
+
+Use either Colab badge at the top of this README. In Colab, choose **Runtime > Run all**. Both notebooks are self-contained and need no secrets or manual file setup.
 
 ## Generate the complete analysis
 
