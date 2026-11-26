@@ -1,5 +1,12 @@
 # House Price Prediction System
 
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-Web_App-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-Linear_Regression-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)](https://scikit-learn.org/)
+[![Tests](https://img.shields.io/badge/Tests-2_Passed-2EA44F?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-8A2BE2?style=for-the-badge)](LICENSE)
+[![Repository](https://img.shields.io/badge/GitHub-Public-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/kamrullab/house-price-prediction-system)
+
 A complete academic machine-learning project that predicts residential property prices with Multiple Linear Regression. It includes reproducible sample data, preprocessing, model evaluation, automated tests, and an interactive Streamlit web application.
 
 > The bundled CSV contains **synthetic demonstration data**, not real market observations. Replace it with a verified local dataset before using the system for research or decision-making.
@@ -35,15 +42,41 @@ A complete academic machine-learning project that predicts residential property 
 
 ## Setup on Windows PowerShell
 
+Run each command separately. Every command has its own copy button on GitHub.
+
 ```powershell
-git clone https://github.com/kamrullab/Kamrullab.git
-cd Kamrullab
+git clone https://github.com/kamrullab/house-price-prediction-system.git
+```
+
+```powershell
+cd house-price-prediction-system
+```
+
+```powershell
 python -m venv .venv
+```
+
+```powershell
 .\.venv\Scripts\Activate.ps1
+```
+
+```powershell
 python -m pip install --upgrade pip
+```
+
+```powershell
 pip install -r requirements.txt
+```
+
+```powershell
 python generate_sample_data.py
+```
+
+```powershell
 python train_model.py
+```
+
+```powershell
 streamlit run app.py
 ```
 
@@ -58,8 +91,8 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ## Setup on macOS or Linux
 
 ```bash
-git clone https://github.com/kamrullab/Kamrullab.git
-cd Kamrullab
+git clone https://github.com/kamrullab/house-price-prediction-system.git
+cd house-price-prediction-system
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
