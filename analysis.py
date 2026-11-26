@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
-from src.model import compare_models, train_and_evaluate
+from src.model import NUMERIC_FEATURES, compare_models, train_and_evaluate
 
 DATA_PATH = Path("data/housing.csv")
 OUTPUT_DIR = Path("reports/figures")
@@ -37,8 +37,25 @@ def main() -> None:
     plt.ylabel("Sale price in USD")
     save_figure("area_vs_price.png")
 
-    _, metrics, comparison = train_and_evaluate(data)
+    model, metrics, comparison = train_and_evaluate(data)
     comparison["residual"] = comparison["actual"] - comparison["predicted"]
+
+    coefficients = model.named_steps["model"].coef_[: len(NUMERIC_FEATURES)]
+    feature_impact = pd.DataFrame(
+        {
+            "feature": NUMERIC_FEATURES,
+            "standardized_coefficient_usd": coefficients,
+            "absolute_impact_usd": abs(coefficients),
+        }
+    ).sort_values("absolute_impact_usd", ascending=False)
+    feature_impact.to_csv(OUTPUT_DIR.parent / "standardized_feature_impact.csv", index=False)
+    plt.figure(figsize=(8, 5))
+    sns.barplot(data=feature_impact, x="standardized_coefficient_usd", y="feature", color="#2E6F9E")
+    plt.axvline(0, color="#333333", linewidth=1)
+    plt.title("Standardized Numeric Feature Impact")
+    plt.xlabel("Price change in USD for one standard-deviation increase")
+    plt.ylabel("Feature")
+    save_figure("standardized_feature_impact.png")
 
     plt.figure(figsize=(7, 6))
     sns.scatterplot(data=comparison, x="actual", y="predicted", alpha=0.4, s=24)
