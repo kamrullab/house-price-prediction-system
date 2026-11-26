@@ -3,13 +3,25 @@
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-Web_App-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-Linear_Regression-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)](https://scikit-learn.org/)
-[![Tests](https://img.shields.io/badge/Tests-2_Passed-2EA44F?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-4_Passed-2EA44F?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-8A2BE2?style=for-the-badge)](LICENSE)
 [![Repository](https://img.shields.io/badge/GitHub-Public-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/kamrullab/house-price-prediction-system)
+[![Open in Colab](https://img.shields.io/badge/Open_in_Colab-Run_Notebook-F9AB00?style=for-the-badge&logo=googlecolab&logoColor=white)](https://colab.research.google.com/github/kamrullab/house-price-prediction-system/blob/main/notebooks/House_Price_Prediction_Colab.ipynb)
+[![GitHub Actions](https://img.shields.io/github/actions/workflow/status/kamrullab/house-price-prediction-system/tests.yml?branch=main&style=for-the-badge&logo=githubactions&label=Build)](https://github.com/kamrullab/house-price-prediction-system/actions)
 
 A complete academic machine-learning project that predicts residential property prices with Multiple Linear Regression. It includes real public house-sale data, preprocessing, model evaluation, automated tests, and an interactive Streamlit web application.
 
 > The bundled CSV contains real King County, Washington house sales from May 2014 to May 2015. It is useful for education, but its age and location mean it must not be treated as a current valuation tool.
+
+![Streamlit application](reports/figures/streamlit_app.png)
+
+## Project deliverables
+
+- [Google Colab notebook](notebooks/House_Price_Prediction_Colab.ipynb)
+- [Academic report in Word format](output/document/House_Price_Prediction_Academic_Report.docx)
+- [Academic report in PDF format](output/pdf/House_Price_Prediction_Academic_Report.pdf)
+- [Generated EDA and evaluation figures](reports/figures/)
+- [Model comparison results](reports/model_comparison.csv)
 
 ## Features
 
@@ -20,6 +32,9 @@ A complete academic machine-learning project that predicts residential property 
 - Displays actual-versus-predicted results
 - Saves the complete preprocessing and model pipeline with Joblib
 - Includes unit tests and an interactive Streamlit interface
+- Supports CSV upload, custom-model download, and prediction-history export
+- Compares Linear Regression with a Random Forest benchmark
+- Includes a Google Colab notebook, EDA charts, residual analysis, and an academic report
 
 ## Project structure
 
@@ -29,6 +44,9 @@ A complete academic machine-learning project that predicts residential property 
 ├── data/housing.csv            # Real King County house-sales dataset
 ├── download_real_data.py       # Downloads a fresh copy from OpenML
 ├── generate_sample_data.py     # Generates test/demo data if needed
+├── analysis.py                 # Creates EDA and evaluation figures
+├── notebooks/                  # Google Colab-compatible notebook
+├── reports/                    # Metrics, figures, and academic report
 ├── src/model.py                # Validation, preprocessing, training, inference
 ├── tests/test_model.py         # Automated tests
 ├── train_model.py              # Command-line training entry point
@@ -74,7 +92,7 @@ python train_model.py
 ```
 
 ```powershell
-streamlit run app.py
+python -m streamlit run app.py
 ```
 
 Open the local address printed by Streamlit, normally <http://localhost:8501>.
@@ -116,14 +134,14 @@ python train_model.py
 ```
 
 ```bash
-streamlit run app.py
+python -m streamlit run app.py
 ```
 
 Run each command separately. Every command has its own copy button on GitHub.
 
 ## Real dataset
 
-The committed `data/housing.csv` is prepared from the **King County House Sales** dataset on [OpenML](https://www.openml.org/search?id=42092&type=data). It contains 21,613 real sales, 19 property features plus price and ID, and is released under **CC0 Public Domain**.
+The committed `data/housing.csv` is prepared from the **King County House Sales** dataset on [OpenML](https://www.openml.org/search?id=42092&type=data). The source contains 21,613 sales, 19 property features plus price and ID, and is released under **CC0 Public Domain**. Cleaning leaves 21,601 usable rows in this repository.
 
 The app uses these fields:
 
@@ -141,6 +159,27 @@ The repository already contains the prepared CSV, so setup works without downloa
 ```bash
 python download_real_data.py
 ```
+
+## Google Colab
+
+Use the **Open in Colab** badge at the top of this README. In Colab, choose **Runtime > Run all**. The notebook clones this repository, installs its requirements, loads the real dataset, creates the EDA plots, trains the model, evaluates residuals, compares both algorithms, and makes an example prediction.
+
+## Generate the complete analysis
+
+```bash
+python analysis.py
+```
+
+This writes the correlation heatmap, area-price chart, actual-predicted chart, residual plots, Linear Regression metrics, and model-comparison table to `reports/`.
+
+## Deploy on Streamlit Community Cloud
+
+1. Sign in at [share.streamlit.io](https://share.streamlit.io/) with GitHub.
+2. Select **Create app** and choose `kamrullab/house-price-prediction-system`.
+3. Select branch `main` and entry point `app.py`.
+4. Select **Deploy**. No secrets or environment variables are required.
+
+The included `.streamlit/config.toml` provides the production theme and headless server configuration.
 
 ## Train with your own data
 

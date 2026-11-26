@@ -9,6 +9,7 @@ import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
@@ -29,7 +30,7 @@ def validate_data(data: pd.DataFrame) -> None:
         raise ValueError("At least 10 rows are required to train and evaluate the model.")
 
 
-def build_pipeline() -> Pipeline:
+def build_pipeline(estimator=None) -> Pipeline:
     """Create a preprocessing and multiple-linear-regression pipeline."""
     numeric = Pipeline([("imputer", SimpleImputer(strategy="median"))])
     categorical = Pipeline(
@@ -41,7 +42,8 @@ def build_pipeline() -> Pipeline:
     preprocessing = ColumnTransformer(
         [("numeric", numeric, NUMERIC_FEATURES), ("categorical", categorical, CATEGORICAL_FEATURES)]
     )
-    return Pipeline([("preprocessing", preprocessing), ("model", LinearRegression())])
+    selected_estimator = estimator if estimator is not None else LinearRegression()
+    return Pipeline([("preprocessing", preprocessing), ("model", selected_estimator)])
 
 
 def train_and_evaluate(data: pd.DataFrame, test_size: float = 0.2, random_state: int = 42):
@@ -66,6 +68,36 @@ def train_and_evaluate(data: pd.DataFrame, test_size: float = 0.2, random_state:
     }
     comparison = pd.DataFrame({"actual": y_test, "predicted": predictions}).reset_index(drop=True)
     return pipeline, metrics, comparison
+
+
+def compare_models(data: pd.DataFrame, test_size: float = 0.2, random_state: int = 42) -> pd.DataFrame:
+    """Evaluate Linear Regression and Random Forest on the same holdout split."""
+    validate_data(data)
+    clean = data.drop_duplicates().dropna(subset=[TARGET]).copy()
+    clean[CATEGORICAL_FEATURES] = clean[CATEGORICAL_FEATURES].astype("string")
+    x_train, x_test, y_train, y_test = train_test_split(
+        clean[FEATURES], clean[TARGET], test_size=test_size, random_state=random_state
+    )
+    estimators = {
+        "Linear Regression": LinearRegression(),
+        "Random Forest": RandomForestRegressor(
+            n_estimators=150, max_depth=18, min_samples_leaf=2, random_state=random_state, n_jobs=-1
+        ),
+    }
+    rows = []
+    for name, estimator in estimators.items():
+        pipeline = build_pipeline(estimator)
+        pipeline.fit(x_train, y_train)
+        predictions = pipeline.predict(x_test)
+        rows.append(
+            {
+                "model": name,
+                "mae": float(mean_absolute_error(y_test, predictions)),
+                "rmse": float(mean_squared_error(y_test, predictions) ** 0.5),
+                "r2": float(r2_score(y_test, predictions)),
+            }
+        )
+    return pd.DataFrame(rows).sort_values("r2", ascending=False).reset_index(drop=True)
 
 
 def save_model(pipeline: Pipeline, path: str | Path) -> None:

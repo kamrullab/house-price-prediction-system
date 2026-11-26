@@ -5,7 +5,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-from src.model import FEATURES, load_model, save_model, train_and_evaluate
+from src.model import FEATURES, compare_models, load_model, save_model, train_and_evaluate, validate_data
 
 DATA_PATH = Path("data/housing.csv")
 MODEL_PATH = Path("models/house_price_model.joblib")
@@ -13,6 +13,9 @@ MODEL_PATH = Path("models/house_price_model.joblib")
 st.set_page_config(page_title="House Price Predictor", page_icon="🏠", layout="wide")
 st.title("🏠 House Price Prediction System")
 st.caption("King County house sales - Multiple Linear Regression")
+
+if "prediction_history" not in st.session_state:
+    st.session_state.prediction_history = []
 
 
 @st.cache_resource
@@ -26,7 +29,9 @@ def get_model():
     return model
 
 
-predict_tab, evaluate_tab, data_tab = st.tabs(["Predict", "Model evaluation", "Dataset"])
+predict_tab, evaluate_tab, data_tab, custom_tab = st.tabs(
+    ["Predict", "Model evaluation", "Dataset", "Use your CSV"]
+)
 
 with predict_tab:
     st.subheader("Enter property details")
@@ -48,6 +53,17 @@ with predict_tab:
         prediction = max(0, float(get_model().predict(row)[0]))
         st.metric("Estimated sale price", f"USD ${prediction:,.0f}")
         st.info("This demonstration estimate is not a professional property valuation.")
+        st.session_state.prediction_history.append({**row.iloc[0].to_dict(), "predicted_price": prediction})
+
+    if st.session_state.prediction_history:
+        history = pd.DataFrame(st.session_state.prediction_history)
+        st.download_button(
+            "Download prediction history",
+            history.to_csv(index=False).encode("utf-8"),
+            "prediction_history.csv",
+            "text/csv",
+            use_container_width=True,
+        )
 
 with evaluate_tab:
     st.subheader("Holdout evaluation")
@@ -58,6 +74,8 @@ with evaluate_tab:
         c2.metric("Root Mean Squared Error", f"USD ${metrics['rmse']:,.0f}")
         c3.metric("R² score", f"{metrics['r2']:.3f}")
         st.scatter_chart(comparison, x="actual", y="predicted")
+        st.subheader("Model comparison")
+        st.dataframe(compare_models(pd.read_csv(DATA_PATH)), use_container_width=True, hide_index=True)
     else:
         st.warning("No dataset found. Run `python download_real_data.py`.")
 
@@ -69,4 +87,28 @@ with data_tab:
         st.dataframe(dataset, use_container_width=True)
     else:
         st.warning("No dataset found.")
+
+with custom_tab:
+    st.subheader("Train with your own CSV")
+    st.write("Upload a CSV containing area, bedrooms, bathrooms, age, location, and price.")
+    uploaded = st.file_uploader("Housing CSV", type=["csv"])
+    if uploaded is not None:
+        try:
+            custom_data = pd.read_csv(uploaded)
+            validate_data(custom_data)
+            st.success(f"Validated {len(custom_data):,} rows.")
+            st.dataframe(custom_data.head(20), use_container_width=True)
+            custom_model, custom_metrics, _ = train_and_evaluate(custom_data)
+            st.json({key: round(value, 4) for key, value in custom_metrics.items()})
+            model_path = Path("models/custom_house_price_model.joblib")
+            save_model(custom_model, model_path)
+            st.download_button(
+                "Download trained model",
+                model_path.read_bytes(),
+                "custom_house_price_model.joblib",
+                "application/octet-stream",
+                use_container_width=True,
+            )
+        except Exception as error:
+            st.error(f"Could not train this file: {error}")
 
