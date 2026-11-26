@@ -9,6 +9,25 @@
 [![Open in Colab](https://img.shields.io/badge/Open_in_Colab-Run_Notebook-F9AB00?style=for-the-badge&logo=googlecolab&logoColor=white)](https://colab.research.google.com/github/kamrullab/house-price-prediction-system/blob/main/notebooks/House_Price_Prediction_Colab.ipynb)
 [![GitHub Actions](https://img.shields.io/github/actions/workflow/status/kamrullab/house-price-prediction-system/tests.yml?branch=main&style=for-the-badge&logo=githubactions&label=Build)](https://github.com/kamrullab/house-price-prediction-system/actions)
 
+## Run the complete project in Google Colab
+
+<a href="https://colab.research.google.com/github/kamrullab/house-price-prediction-system/blob/main/notebooks/House_Price_Prediction_Colab.ipynb">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open the complete project in Google Colab">
+</a>
+
+Click the button above, then select **Runtime > Run all**. Colab will automatically:
+
+1. Clone or update the latest public repository.
+2. Install every required Python package.
+3. Load and inspect the committed real dataset.
+4. Generate the correlation heatmap and area-price analysis.
+5. Train and evaluate Multiple Linear Regression.
+6. Display actual-versus-predicted and residual plots.
+7. Compare Linear Regression with Random Forest.
+8. Generate an example house-price prediction.
+
+No file upload, Google Drive mount, API key, or manual path editing is required.
+
 A complete academic machine-learning project that predicts residential property prices with Multiple Linear Regression. It includes real public house-sale data, preprocessing, model evaluation, automated tests, and an interactive Streamlit web application.
 
 > The bundled CSV contains real King County, Washington house sales from May 2014 to May 2015. It is useful for education, but its age and location mean it must not be treated as a current valuation tool.
