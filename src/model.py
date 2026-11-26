@@ -49,6 +49,7 @@ def train_and_evaluate(data: pd.DataFrame, test_size: float = 0.2, random_state:
     validate_data(data)
     clean = data.drop_duplicates().copy()
     clean = clean.dropna(subset=[TARGET])
+    clean[CATEGORICAL_FEATURES] = clean[CATEGORICAL_FEATURES].astype("string")
     if len(clean) < 10:
         raise ValueError("At least 10 rows with a price are required after cleaning.")
 

@@ -7,9 +7,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-8A2BE2?style=for-the-badge)](LICENSE)
 [![Repository](https://img.shields.io/badge/GitHub-Public-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/kamrullab/house-price-prediction-system)
 
-A complete academic machine-learning project that predicts residential property prices with Multiple Linear Regression. It includes reproducible sample data, preprocessing, model evaluation, automated tests, and an interactive Streamlit web application.
+A complete academic machine-learning project that predicts residential property prices with Multiple Linear Regression. It includes real public house-sale data, preprocessing, model evaluation, automated tests, and an interactive Streamlit web application.
 
-> The bundled CSV contains **synthetic demonstration data**, not real market observations. Replace it with a verified local dataset before using the system for research or decision-making.
+> The bundled CSV contains real King County, Washington house sales from May 2014 to May 2015. It is useful for education, but its age and location mean it must not be treated as a current valuation tool.
 
 ## Features
 
@@ -26,8 +26,9 @@ A complete academic machine-learning project that predicts residential property 
 ```text
 .
 ├── app.py                      # Streamlit web application
-├── data/housing.csv            # Synthetic demonstration dataset
-├── generate_sample_data.py     # Recreates the sample dataset
+├── data/housing.csv            # Real King County house-sales dataset
+├── download_real_data.py       # Downloads a fresh copy from OpenML
+├── generate_sample_data.py     # Generates test/demo data if needed
 ├── src/model.py                # Validation, preprocessing, training, inference
 ├── tests/test_model.py         # Automated tests
 ├── train_model.py              # Command-line training entry point
@@ -69,10 +70,6 @@ pip install -r requirements.txt
 ```
 
 ```powershell
-python generate_sample_data.py
-```
-
-```powershell
 python train_model.py
 ```
 
@@ -92,14 +89,57 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
 ```bash
 git clone https://github.com/kamrullab/house-price-prediction-system.git
+```
+
+```bash
 cd house-price-prediction-system
+```
+
+```bash
 python3 -m venv .venv
+```
+
+```bash
 source .venv/bin/activate
+```
+
+```bash
 python -m pip install --upgrade pip
+```
+
+```bash
 pip install -r requirements.txt
-python generate_sample_data.py
+```
+
+```bash
 python train_model.py
+```
+
+```bash
 streamlit run app.py
+```
+
+Run each command separately. Every command has its own copy button on GitHub.
+
+## Real dataset
+
+The committed `data/housing.csv` is prepared from the **King County House Sales** dataset on [OpenML](https://www.openml.org/search?id=42092&type=data). It contains 21,613 real sales, 19 property features plus price and ID, and is released under **CC0 Public Domain**.
+
+The app uses these fields:
+
+| App field | Original field | Meaning |
+|---|---|---|
+| `area` | `sqft_living` | Interior living area in square feet |
+| `bedrooms` | `bedrooms` | Bedroom count |
+| `bathrooms` | `bathrooms` | Bathroom count |
+| `age` | `date - yr_built` | Age when the property was sold |
+| `location` | `zipcode` | Property ZIP code |
+| `price` | `price` | Recorded sale price in USD |
+
+The repository already contains the prepared CSV, so setup works without downloading anything else. To refresh it directly through Scikit-learn's documented [`fetch_openml`](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_openml.html) interface, run:
+
+```bash
+python download_real_data.py
 ```
 
 ## Train with your own data
@@ -112,8 +152,8 @@ Create a CSV containing these exact columns:
 | `bedrooms` | integer | `3` | Bedroom count |
 | `bathrooms` | integer | `2` | Bathroom count |
 | `age` | number | `5` | Property age in years |
-| `location` | text | `Suburb` | Area or neighborhood |
-| `price` | number | `12500000` | Target price in BDT |
+| `location` | text | `98178` | Area, neighborhood, or ZIP code |
+| `price` | number | `450000` | Target price in the dataset's currency |
 
 Then train the model:
 
@@ -121,7 +161,7 @@ Then train the model:
 python train_model.py --data path/to/your-housing-data.csv --output models/house_price_model.joblib
 ```
 
-For real data, update the location choices in `app.py` to match the locations used by your dataset.
+The app reads its location choices directly from the CSV.
 
 ## Run tests
 
@@ -149,8 +189,8 @@ price = intercept + b1(area) + b2(bedrooms) + b3(bathrooms)
 
 ## Limitations
 
-- Synthetic data is suitable only for demonstration.
-- Housing markets change over time, so real models require recent local data and periodic retraining.
+- The bundled sales are from 2014-2015 and are not current market valuations.
+- Housing markets change over time, so production models require recent local data and periodic retraining.
 - Linear regression may not capture complex nonlinear relationships.
 - A prediction is an estimate, not a certified property valuation.
 
