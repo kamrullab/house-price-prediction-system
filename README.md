@@ -40,7 +40,7 @@ A complete academic machine-learning project that predicts residential property 
 ## ✨ Features
 
 - Predicts prices from area, bedrooms, bathrooms, property age, and location
-- Handles missing numeric and categorical values
+- Handles missing numeric and categorical values and standardizes numeric features
 - Encodes previously unseen locations safely
 - Reports MAE, RMSE, and R² on a reproducible 80/20 test split
 - Displays actual-versus-predicted results
@@ -234,7 +234,7 @@ pytest -q
 
 1. Validate required columns and remove duplicate records.
 2. Drop records without a target price.
-3. Impute missing numeric values with the median.
+3. Impute missing numeric values with the median, then standardize them with `StandardScaler`.
 4. Impute missing locations with the most frequent value and one-hot encode them.
 5. Split records into 80% training and 20% testing data with a fixed random seed.
 6. Fit a Multiple Linear Regression model.

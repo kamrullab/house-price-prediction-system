@@ -30,3 +30,10 @@ def test_unknown_location_can_be_predicted():
     sample = pd.DataFrame([[1500, 3, 2, 5, "Unknown ZIP"]], columns=FEATURES)
     assert model.predict(sample).shape == (1,)
 
+
+def test_numeric_features_are_standardized():
+    model, _, _ = train_and_evaluate(generate(rows=100))
+    numeric_pipeline = model.named_steps["preprocessing"].named_transformers_["numeric"]
+    assert "scaler" in numeric_pipeline.named_steps
+    assert numeric_pipeline.named_steps["scaler"].mean_.shape == (4,)
+

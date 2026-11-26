@@ -13,7 +13,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 TARGET = "price"
 NUMERIC_FEATURES = ["area", "bedrooms", "bathrooms", "age"]
@@ -32,7 +32,12 @@ def validate_data(data: pd.DataFrame) -> None:
 
 def build_pipeline(estimator=None) -> Pipeline:
     """Create a preprocessing and multiple-linear-regression pipeline."""
-    numeric = Pipeline([("imputer", SimpleImputer(strategy="median"))])
+    numeric = Pipeline(
+        [
+            ("imputer", SimpleImputer(strategy="median")),
+            ("scaler", StandardScaler()),
+        ]
+    )
     categorical = Pipeline(
         [
             ("imputer", SimpleImputer(strategy="most_frequent")),
